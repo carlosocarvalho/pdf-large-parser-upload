@@ -27,7 +27,7 @@ services:
         working_dir: /application
         volumes:
             - './:/application'
-            - './docker/php-fpm/php.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini'
+            - './.docker/php-fpm/php.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini'
         
     queue:
         image: 'carlosocarvalho/php-api-laravel-es:1.0.0'
@@ -41,7 +41,7 @@ services:
         
         volumes:
             - './:/application'
-            - './docker/php-fpm/php.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini'
+            - './.docker/php-fpm/php.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini'
         environment:
             - CONTAINER_ROLE=scheduler
         command: start
