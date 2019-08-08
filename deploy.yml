@@ -1,0 +1,76 @@
+version: '3.1'
+services:
+    mongodb:
+        image: mongo
+        volumes:
+            - mongo-full-text-volume:/usr/share/elasticsearch/data
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: root
+            MONGO_INITDB_DATABASE: laravel
+        ports:
+           - "27015:27017"
+    elastic:
+        image: 'docker.elastic.co/elasticsearch/elasticsearch:7.3.0'
+        volumes:
+            - elastic-full-text-volume:/usr/share/elasticsearch/data
+        ports:
+            - "9200:9200"
+            - "9300:9300"
+        environment:
+            - discovery.type=single-node
+        deploy:
+            resources: {limits: {cpus: '0.50', memory: 512M}}
+    redis:
+        image: 'redis:5-alpine'
+        deploy:
+        resources:
+          limits:
+            cpus: '0.50'
+            memory: 100M
+          reservations:
+            cpus: '0.25'
+            memory: 20M
+    php:
+        image: 'carlosocarvalho/php-api-laravel-es:1.0.0'
+        working_dir: /application
+        volumes:
+            - './:/application'
+            - './docker/php-fpm/php.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini'
+        deploy:
+            resources: {limits: {cpus: '0.50', memory: 300M}}
+    queue:
+        image: 'carlosocarvalho/php-api-laravel-es:1.0.0'
+        volumes:
+            -  ./:/application
+            -  ./.docker/php-fpm/php.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
+        command: 'php artisan horizon'
+        deploy:
+            resources: {limits: {cpus: '0.50', memory: 256M}}
+    schedule:
+        image: 'carlosocarvalho/php-api-laravel-es:1.0.0'
+        
+        volumes:
+            - './:/application'
+            - './docker/php-fpm/php.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini'
+        environment:
+            - CONTAINER_ROLE=scheduler
+        command: start
+        deploy:
+            resources: {limits: {cpus: '0.50', memory: 256M}}
+    nginx:
+        image: 'nginx:alpine'
+        working_dir: /application
+        volumes:
+            - '.:/application'
+            - './.docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
+        ports:
+            - "82:80"
+        deploy:
+            replicas: 1
+            resources: {limits: {cpus: '0.50', memory: 512M}}
+volumes:
+    elastic-full-text-volume:
+        driver: local
+    mongo-full-text-volume:
+        driver: local
