@@ -18,15 +18,45 @@ abstract class AbstractDocument
      */
     protected $model;
 
+    protected $exists;
+
 
     /**
      * get Document Created or First
      */
-    public function get(): Model
+    public function get()
     {
         $document = $this->findOrCreate();
         //$document->increment('version', 1);
         return $document;
+    }
+
+    public function exists()
+    {   $has = false;
+        if ($this->filters) {
+            $document = $this->model->newQuery();
+            foreach ($this->filters as $k => $v) {
+                $document->where($k, $v);
+            }
+            $data = $document->get();
+            $count = $data->count();
+            if ($count > 0) {
+                $this->exists = $data->first();
+                $has = true;
+            }
+        }
+        return $has;
+    }
+
+    public function create(){
+        $document = $this->model;
+        $this->fill($document, $this->data);
+        $document->save();
+    }
+    public function update(){
+        $document = $this->exists;
+        $this->fill($document, $this->data);
+        $document->save();
     }
 
     /**
@@ -43,15 +73,18 @@ abstract class AbstractDocument
             }
             $has = $document->get()->first();
             if ($has) return $has;
-           
+            
         }
         if( !$this->data) return;
 
-        $document = $this->model;
-        foreach ((array) $this->data  as $k => $v) {
-            $document->{$k} = $v;
+        
+        return $this->create();
+    }
+
+    private function fill(&$model, $data)
+    {
+        foreach ((array) $data  as $k => $v) {
+            $model->{$k} = $v;
         }
-        $document->save();
-        return $document;
     }
 }

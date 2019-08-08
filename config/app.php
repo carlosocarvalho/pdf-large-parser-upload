@@ -15,6 +15,9 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'backup_file' => env('BACKUP_FILES', false),
+    'backup_store' => env('BACKUP_FILE_STORE', false),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
