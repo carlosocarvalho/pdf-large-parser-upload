@@ -61,7 +61,8 @@ class FileLargeIndexJob implements ShouldQueue
             $i  = 1;
             
             foreach ($pdf->getPages() as $k => $p) {
-                $content = preg_replace('#(\r|\n|\t)+#', ' ', $p->getText());
+                $content = preg_replace('#(\r|\n)+#', ' ', $p->getText());
+                $content = preg_replace('#(\t)+#', '', $content);
                 if (empty(trim($content))) continue;
                 $chapter = new stdClass;
                 $chapter->body =  $content;
