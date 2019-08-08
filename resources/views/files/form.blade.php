@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Laravel 5.6 - File upload with progress bar - ItSolutionStuff.com</title>
+    <title>Modalnetworks - Pdf Large Index </title>
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,800,800i,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <style>
@@ -11,13 +11,14 @@
             padding: 0px;
             height: 100vh;
             font-family: 'Nunito', sans-serif;
+            background: #444;
 
         }
 
         .main,
         .main-container {
             height: 100vh;
-
+           
         }
 
         .btn {
@@ -31,7 +32,7 @@
     <div class="container main">
         <div class="row main-container align-items-center justify-content-center">
 
-            <div class="col-md-4">
+            <div class=" col-lg-4 col-sm-10">
                 <div class="card">
 
                     <div class="card-body">

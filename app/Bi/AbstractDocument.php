@@ -27,12 +27,12 @@ abstract class AbstractDocument
     public function get()
     {
         $document = $this->findOrCreate();
-        //$document->increment('version', 1);
         return $document;
     }
 
     public function exists()
-    {   $has = false;
+    {
+        $has = false;
         if ($this->filters) {
             $document = $this->model->newQuery();
             foreach ($this->filters as $k => $v) {
@@ -48,21 +48,25 @@ abstract class AbstractDocument
         return $has;
     }
 
-    public function create(){
+    public function create()
+    {
         $document = $this->model;
         $this->fill($document, $this->data);
         $document->save();
+        return $document;
     }
-    public function update(){
+    public function update()
+    {
         $document = $this->exists;
         $this->fill($document, $this->data);
         $document->save();
+        return $document;
     }
 
     /**
      * Undocumented function
      *
-     * @return Book
+     * @return Model
      */
     private function  findOrCreate()
     {
@@ -73,11 +77,7 @@ abstract class AbstractDocument
             }
             $has = $document->get()->first();
             if ($has) return $has;
-            
         }
-        if( !$this->data) return;
-
-        
         return $this->create();
     }
 

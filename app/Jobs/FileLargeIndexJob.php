@@ -19,6 +19,8 @@ class FileLargeIndexJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $tries = 3;
+
     private $filename;
 
     /**
@@ -38,7 +40,7 @@ class FileLargeIndexJob implements ShouldQueue
      */
     public function handle()
     {
-        try {
+        //try {
             //$content = Storage::get(sprintf('files/%s', $this->filename));
             //$parser = new \Smalot\PdfParser\Parser();
             $pdf = (new PdfParser($this->filename))->parserInstance();
@@ -55,7 +57,9 @@ class FileLargeIndexJob implements ShouldQueue
             }
             $book = array_merge($book, ['title' => $title]);
             $doc = (new BookDocument((object) $book))->get();
+            
             $i  = 1;
+            
             foreach ($pdf->getPages() as $k => $p) {
                 $content = preg_replace('#(\r|\n|\t)+#', ' ', $p->getText());
                 if (empty(trim($content))) continue;
@@ -80,6 +84,9 @@ class FileLargeIndexJob implements ShouldQueue
                 Storage::disk(config('app.backup_store'))->put($this->filename, $content);
             }
             Storage::disk('local')->delete('files/' . $this->filename);
-        } catch (\Exception $e) { }
+            $doc->increment('version', 1);
+        // } catch (\Exception $e) { 
+        //     logger($e->getMessage());
+        // }
     }
 }
