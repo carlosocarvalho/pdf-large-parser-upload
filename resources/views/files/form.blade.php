@@ -101,8 +101,8 @@
                 },
                 complete: function(xhr) {
                     status.html(xhr.responseText);
-                    //alert('Uploaded Successfully');
-                    //window.location.href = "/";
+                    alert(xhr.responseText);
+                    window.location.href = "/";
                 }
             });
 

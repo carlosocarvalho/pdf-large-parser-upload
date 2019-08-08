@@ -65,6 +65,12 @@ return [
             'retry_after' => 90,
             'block_for' => null,
         ],
+        'mongodb' => array(
+            'driver' => 'mongodb',
+            'table' => 'jobs',
+            'queue' => 'default',
+            'expire' => 60,
+        ),
 
     ],
 

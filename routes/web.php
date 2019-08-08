@@ -14,4 +14,5 @@
 
 
 Route::get('/', 'FileController@show');
+Route::get('/in', 'FileController@index');
 Route::post('files/upload', 'FileController@upload')->name('fileUploadPost');

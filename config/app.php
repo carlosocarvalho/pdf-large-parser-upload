@@ -174,6 +174,11 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\AzureBlobServiceProvider::class,
+        App\Providers\ElasticSearchScoutServiceProvider::class,
+        ScoutElastic\ScoutElasticServiceProvider::class,
+        //ChefsPlate\Queue\MongoDBServiceProvider::class,
+        // ScoutEngines\Elasticsearch\ElasticsearchProvider::class,
 
     ],
 
