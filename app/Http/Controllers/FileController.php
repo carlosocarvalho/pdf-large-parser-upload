@@ -49,7 +49,7 @@ class FileController extends Controller
 
     public function index()
     {
-        $chapters = Chapter::orderBy('updated_at','desc')->get();
+        $chapters = (new Chapter)->orderBy('updated_at','desc')->get();
         
         return view('book.chapter', compact('chapters'));
     }
