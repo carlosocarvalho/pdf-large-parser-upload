@@ -16,14 +16,14 @@ class PlatformScreen extends Screen
      *
      * @var string
      */
-    public $name = 'Dashboard';
+    public $name = 'Painel';
 
     /**
      * Display header description.
      *
      * @var string
      */
-    public $description = 'Welcome';
+    public $description = 'Bem vindo';
 
     /**
      * Query data.
@@ -46,17 +46,17 @@ class PlatformScreen extends Screen
     public function commandBar(): array
     {
         return [
-            Link::name('Website')
-                ->link('http://orchid.software')
-                ->icon('icon-globe-alt'),
+            // Link::name('Website')
+            //     ->link('http://orchid.software')
+            //     ->icon('icon-globe-alt'),
 
-            Link::name('Documentation')
-              ->link('https://orchid.software/en/docs')
-              ->icon('icon-docs'),
+            // Link::name('Documentation')
+            //   ->link('https://orchid.software/en/docs')
+            //   ->icon('icon-docs'),
 
-            Link::name('GitHub')
-                ->link('https://github.com/orchidsoftware/platform')
-                ->icon('icon-social-github'),
+            // Link::name('GitHub')
+            //     ->link('https://github.com/orchidsoftware/platform')
+            //     ->icon('icon-social-github'),
         ];
     }
 
@@ -68,8 +68,8 @@ class PlatformScreen extends Screen
     public function layout(): array
     {
         return [
-            Layout::view('platform::partials.update'),
-            Layout::view('platform::partials.welcome'),
+           // Layout::view('platform::partials.update'),
+           // Layout::view('platform::partials.welcome'),
         ];
     }
 }
