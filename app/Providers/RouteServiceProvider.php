@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\AttachmentOrchidController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -34,7 +35,9 @@ class RouteServiceProvider extends ServiceProvider
      * @return void
      */
     public function map()
-    {
+    {   
+
+        Route::delete('dashboard/systems/files/{id}', [AttachmentOrchidController::class, 'destroy'])->name('platform.systems.files.destroy');
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();

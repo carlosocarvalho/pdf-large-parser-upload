@@ -8,6 +8,16 @@ class Book extends Model
 {
     
      protected $hidden = ['_id'];
-     protected $collection = 'books';
+     protected $collection = 'documents';
      protected $connection = 'mongodb';
+
+
+     public function fillable($data){
+
+          foreach($data as $k => $v){
+               $this->{$k} = $v;
+          }
+
+          return $this;
+     }
 }

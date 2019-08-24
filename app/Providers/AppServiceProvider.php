@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Observers\AttachmentObserver;
 use Illuminate\Support\ServiceProvider;
+use Orchid\Attachment\Models\Attachment;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,5 +26,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+
+        Attachment::observe(AttachmentObserver::class);
     }
 }

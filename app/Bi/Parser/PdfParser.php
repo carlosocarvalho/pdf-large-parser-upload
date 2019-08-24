@@ -12,7 +12,7 @@ class PdfParser
     public function __construct($filename)
     {
         $parser = new Parser();
-        $this->pdf = $parser->parseFile(sprintf('%s/%s', storage_path('app/files'), $filename));
+        $this->pdf = $parser->parseFile(sprintf('%s', $filename));
     }
 
     public function parserInstance()

@@ -19,6 +19,7 @@
         "laravel/tinker": "^1.0",
         "league/flysystem": "^1.0",
         "league/flysystem-azure-blob-storage": "^0.1.6",
+        "orchid/platform": "^5.5",
         "predis/predis": "^1.1",
         "rebing/graphql-laravel": "^2.0",
         "smalot/pdfparser": "^0.14.0"

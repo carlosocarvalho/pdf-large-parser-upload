@@ -19,25 +19,37 @@ services:
             - "9300:9300"
         environment:
             - discovery.type=single-node
-        
     redis:
         image: 'redis:5-alpine'
+        ports:
+          - "6379:6379"
+    db:
+      image: postgres:12-alpine
+      environment:
+        POSTGRES_PASSWORD: fulltext
+        POSTGRES_DB: fulltext  
+        POSTGRES_USER: fulltext 
+      volumes:
+        - db-full-text-volume:/var/lib/postgresql/data
+      ports:
+        - "5432:5432"  
     php:
-        image: 'carlosocarvalho/php-api-laravel-es:1.0.0'
+        image: 'carlosocarvalho/app-fulltext-laravel:1.0.1'
         working_dir: /application
+        # command: ['./.docker/php-fpm/entrypoint.sh']
         volumes:
             - './:/application'
             - './.docker/php-fpm/php.ini:/etc/php/7.3/fpm/conf.d/99-overrides.ini'
         
     queue:
-        image: 'carlosocarvalho/php-api-laravel-es:1.0.0'
+        image: 'carlosocarvalho/app-fulltext-laravel:1.0.1'
         volumes:
             -  ./:/application
             -  ./.docker/php-fpm/php.ini:/etc/php/7.3/fpm/conf.d/99-overrides.ini
         command: 'php artisan horizon'
        
     schedule:
-        image: 'carlosocarvalho/php-api-laravel-es:1.0.0'
+        image: 'carlosocarvalho/app-fulltext-laravel:1.0.1'
         
         volumes:
             - './:/application'
@@ -60,3 +72,5 @@ volumes:
         driver: local
     mongo-full-text-volume:
         driver: local
+    db-full-text-volume: 
+        driver: local    

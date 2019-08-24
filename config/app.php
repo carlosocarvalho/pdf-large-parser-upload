@@ -180,6 +180,7 @@ return [
         App\Providers\AzureBlobServiceProvider::class,
         App\Providers\ElasticSearchScoutServiceProvider::class,
         ScoutElastic\ScoutElasticServiceProvider::class,
+        //Laralum\Laralum\LaralumServiceProvider::class,
         //ChefsPlate\Queue\MongoDBServiceProvider::class,
         // ScoutEngines\Elasticsearch\ElasticsearchProvider::class,
 

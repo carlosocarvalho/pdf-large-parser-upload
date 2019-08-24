@@ -35,9 +35,11 @@ abstract class AbstractDocument
         $has = false;
         if ($this->filters) {
             $document = $this->model->newQuery();
+            
             foreach ($this->filters as $k => $v) {
                 $document->where($k, $v);
             }
+            
             $data = $document->get();
             $count = $data->count();
             if ($count > 0) {
