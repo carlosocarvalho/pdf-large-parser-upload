@@ -57,16 +57,27 @@ services:
         environment:
             - CONTAINER_ROLE=scheduler
         command: start
-        
     nginx:
         image: 'nginx:alpine'
         working_dir: /application
         volumes:
             - '.:/application'
             - './.docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
-        ports:
-            - "82:80"
-        
+        deploy:
+           labels:
+             traefik.docker.network: web
+             traefik.enable: 'true'
+             traefik.frontend: fulltext
+             traefik.frontend.rule: Path:/
+             traefik.port: '80'
+        networks:
+         - web
+         - default
+networks:
+  default:
+    driver: overlay
+  web:
+    external: true
 volumes:
     elastic-full-text-volume:
         driver: local
