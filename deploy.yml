@@ -80,7 +80,6 @@ services:
                 traefik.docker.network: web
                 traefik.enable: "true"
                 traefik.frontend: fulltext
-                traefik.frontend.rule: Path:/
                 traefik.port: "80"
         networks:
             - web
