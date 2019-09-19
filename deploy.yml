@@ -87,7 +87,7 @@ services:
             - app-net
 networks:
     app-net:
-        driver: local
+        driver: overlay
     web:
         external: true
 volumes:
