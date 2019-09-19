@@ -80,6 +80,7 @@ services:
                 traefik.docker.network: web
                 traefik.enable: "true"
                 traefik.frontend: fulltext
+                traefik.frontend.rule: "Host: 165.227.90.191"
                 traefik.port: "80"
         networks:
             - web
