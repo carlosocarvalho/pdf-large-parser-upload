@@ -92,8 +92,8 @@ networks:
         external: true
 volumes:
     elastic-full-text-volume:
-        driver: local
+        external: true
     mongo-full-text-volume:
-        driver: local
+        external: true
     db-full-text-volume:
-        driver: local
+        external: true
