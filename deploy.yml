@@ -10,6 +10,8 @@ services:
             MONGO_INITDB_DATABASE: laravel
         ports:
            - "27015:27017"
+        networks:
+         - default   
     elastic:
         image: 'docker.elastic.co/elasticsearch/elasticsearch:7.3.0'
         volumes:
@@ -19,10 +21,14 @@ services:
             - "9300:9300"
         environment:
             - discovery.type=single-node
+        networks:
+         - default    
     redis:
         image: 'redis:5-alpine'
         ports:
           - "6379:6379"
+        networks:
+         - default  
     db:
       image: postgres:12-alpine
       environment:
@@ -32,7 +38,9 @@ services:
       volumes:
         - db-full-text-volume:/var/lib/postgresql/data
       ports:
-        - "5432:5432"  
+        - "5432:5432"
+      networks:
+         - default    
     php:
         image: 'carlosocarvalho/app-fulltext-laravel:1.0.1'
         working_dir: /application
@@ -40,14 +48,16 @@ services:
         volumes:
             - './:/application'
             - './.docker/php-fpm/php.ini:/etc/php/7.3/fpm/conf.d/99-overrides.ini'
-        
+        networks:
+         - default
     queue:
         image: 'carlosocarvalho/app-fulltext-laravel:1.0.1'
         volumes:
             -  ./:/application
             -  ./.docker/php-fpm/php.ini:/etc/php/7.3/fpm/conf.d/99-overrides.ini
         command: 'php artisan horizon'
-       
+        networks:
+         - default
     schedule:
         image: 'carlosocarvalho/app-fulltext-laravel:1.0.1'
         
@@ -57,6 +67,8 @@ services:
         environment:
             - CONTAINER_ROLE=scheduler
         command: start
+        networks:
+         - default
     nginx:
         image: 'nginx:alpine'
         working_dir: /application
