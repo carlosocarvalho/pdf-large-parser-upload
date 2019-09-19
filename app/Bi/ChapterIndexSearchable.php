@@ -42,12 +42,14 @@ class ChapterIndexSearchable
             $exists = $document->exists();
             if ($exists) {
                 $document->update();
+                $i += 1;
                 //$indexed = true;
             } else {
                 $document->create();
                 $indexed = true;
+                $i += 1;
             }
-            $i += 1;
+            
         }
 
         if ($indexed) {
