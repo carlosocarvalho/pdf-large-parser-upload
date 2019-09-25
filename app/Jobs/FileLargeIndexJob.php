@@ -60,31 +60,32 @@ class FileLargeIndexJob implements ShouldQueue
             
             $i  = 1;
             
-            foreach ($pdf->getPages() as $k => $p) {
-                $content = preg_replace('#(\r|\n)+#', ' ', $p->getText());
-                $content = preg_replace('#(\t)+#', '', $content);
-                if (empty(trim($content))) continue;
-                $chapter = new stdClass;
-                $chapter->body =  $content;
-                $chapter->raw  = $p->getText();
-                $chapter->page = $i;
-                $chapter->parent_id = $doc->_id;
-                $chapter->book = $doc->toArray();
-                $document = (new ChapterDocument($chapter));
-                $exists = $document->exists();
-                if ($exists) {
-                    $document->update();
-                }
-                if (!$exists) {
-                    $document->create();
-                }
-                $i += 1;
-            }
+            // foreach ($pdf->getPages() as $k => $p) {
+            //     $content = preg_replace('#(\r|\n)+#', ' ', $p->getText());
+            //     $content = preg_replace('#(\t)+#', '', $content);
+            //     if (empty(trim($content))) continue;
+            //     $chapter = new stdClass;
+            //     $chapter->body =  $content;
+            //     $chapter->raw  = $p->getText();
+            //     $chapter->page = $i;
+            //     $chapter->parent_id = $doc->_id;
+            //     $chapter->book = $doc->toArray();
+            //     $document = (new ChapterDocument($chapter));
+            //     $exists = $document->exists();
+            //     if ($exists) {
+            //         $document->update();
+            //     }
+            //     if (!$exists) {
+            //         $document->create();
+            //     }
+            //     $i += 1;
+            // }
             if (config('app.backup_file')) {
                 $content = Storage::get(sprintf('files/%s', $this->filename));
                 Storage::disk(config('app.backup_store'))->put($this->filename, $content);
             }
-            Storage::disk('local')->delete('files/' . $this->filename);
+            //if( )
+            //Storage::disk('local')->delete('files/' . $this->filename);
             $doc->increment('version', 1);
         // } catch (\Exception $e) { 
         //     logger($e->getMessage());

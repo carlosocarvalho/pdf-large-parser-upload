@@ -6,6 +6,7 @@ use Orchid\Attachment\Models\Attachment;
 use stdClass;
 use App\Bi\ChapterDocument;
 use App\Bi\Parser\PdfParser;
+use App\Jobs\ToSaveRemoteStore;
 use Orchid\Alert\Alert;
 use App\User;
 use Orchid\Platform\Notifications\DashboardNotification;
@@ -59,10 +60,7 @@ class ChapterIndexSearchable
                 'message' => sprintf('O documento %s foi importado com sucesso %s paginas indexados', $attachment->original_name, $i),
                 'type'    =>  DashboardNotification::SUCCESS,
             ]));
-
+           dispatch(new ToSaveRemoteStore($attachment));
         }
-        //$attachment->pages = $i;
-
-        //$attachment->save();
     }
 }

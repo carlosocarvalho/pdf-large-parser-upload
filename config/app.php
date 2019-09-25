@@ -17,6 +17,7 @@ return [
 
     'backup_file' => env('BACKUP_FILES', false),
     'backup_store' => env('BACKUP_FILE_STORE', false),
+    'backup_file_client_name' => env('BACKUP_FILE_CLIENT_NAME', 'modalnetworks'),
 
     /*
     |--------------------------------------------------------------------------

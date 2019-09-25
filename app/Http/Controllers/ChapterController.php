@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\Book;
 use Illuminate\Http\Request;
 use App\Entities\Chapter;
+use App\Entities\Document;
+use App\Http\Resources\DocumentResource;
 
 class ChapterController extends Controller
 {
@@ -15,26 +18,47 @@ class ChapterController extends Controller
     public function index(Request $request)
     {
         $search = $request->get('q', '*');
-        $search = strlen($search) == 0 || $search == null ? '*': $search;
-      
-        $chapter = Chapter::search($search)
-                   ->orderBy('updated_at', 'desc');
-        
+        $search = strlen($search) == 0 || $search == null ? '*' : $search;
+        $rawSearch = [
+            'aggs' => [
+                'parent_id' => [
+                    'terms' => [
+                        'field' => 'parent_id',
+                        'size'  => 40
+                    ]
+                ]
+            ],
+            'size' => 1
+        ];
+
         if ($search && $search != '*') {
-            
-            $chapter->rule(function ($builder) {
-                return [
-                    'must' => [
-                        'query_string' => [
-                            'fields' => ['book.title', 'body'],
-                            'query' => $builder->query,
-                            'default_operator' => 'AND'
+            $queryArray = [
+                'query' =>   [
+                    'bool' => [
+                        'must' => [
+                            'query_string' => [
+                                'fields' => ['book.title', 'body'],
+                                'query' => sprintf('%s*', $search),
+                                'default_operator' => 'AND'
+                            ]
+
                         ]
                     ]
-                ];
-            });
+                ]
+            ];
+            $rawSearch = array_merge($rawSearch, $queryArray);
         }
-        return $chapter->paginate($request->get('limit', 20));
+
+        //dump($rawSearch);
+        $data = Chapter::searchRaw($rawSearch);
+        $itens = [];
+
+        foreach($data['aggregations']['parent_id']['buckets'] as $row)
+        {
+            $itens[] = $row['key'];
+        }
+
+        return  DocumentResource::collection(Document::whereIn('name', $itens)->paginate(20));
     }
 
     /**
