@@ -25,8 +25,6 @@ services:
             - app-net
     redis:
         image: "redis:5-alpine"
-        ports:
-            - "6379:6379"
         networks:
             - app-net
     db:
@@ -42,28 +40,46 @@ services:
         networks:
             - app-net
     php:
-        image: "carlosocarvalho/app-fulltext-laravel:1.0.1"
+        image: "carlosocarvalho/app-fulltext-laravel:1.0.2"
         working_dir: /application
-        # command: ['./.docker/php-fpm/entrypoint.sh']
+        command: "php artisan migrate --force"
         volumes:
-            - "./:/application"
-            - "./.docker/php-fpm/php.ini:/etc/php/7.3/fpm/conf.d/99-overrides.ini"
+            - applicationVolume:/application
+        configs:  
+            - 
+             source: appEnv
+             target: /application/.env
+            - 
+             source: appPHPIni
+             target: /etc/php/7.3/fpm/conf.d/99-overrides.ini 
+            
         networks:
             - app-net
     queue:
-        image: "carlosocarvalho/app-fulltext-laravel:1.0.1"
+        image: "carlosocarvalho/app-fulltext-laravel:1.0.2"
         volumes:
-            - ./:/application
-            - ./.docker/php-fpm/php.ini:/etc/php/7.3/fpm/conf.d/99-overrides.ini
+            - applicationVolume:/application
+        configs:  
+            - 
+             source: appEnv
+             target: /application/.env
+            - 
+             source: appPHPIni
+             target: /etc/php/7.3/fpm/conf.d/99-overrides.ini 
         command: "php artisan horizon"
         networks:
             - app-net
     schedule:
-        image: "carlosocarvalho/app-fulltext-laravel:1.0.1"
-
+        image: "carlosocarvalho/app-fulltext-laravel:1.0.2"
         volumes:
-            - "./:/application"
-            - "./.docker/php-fpm/php.ini:/etc/php/7.3/fpm/conf.d/99-overrides.ini"
+            - applicationVolume:/application
+        configs:  
+            - 
+             source: appEnv
+             target: /application/.env
+            - 
+             source: appPHPIni
+             target: /etc/php/7.3/fpm/conf.d/99-overrides.ini 
         environment:
             - CONTAINER_ROLE=scheduler
         command: start
@@ -73,8 +89,11 @@ services:
         image: "nginx:alpine"
         working_dir: /application
         volumes:
-            - ".:/application"
-            - "./.docker/nginx/nginx.conf:/etc/nginx/conf.d/app-net.conf"
+            - applicationVolume:/application
+        configs:  
+            - 
+             source: appNginxConfig
+             target: /etc/nginx/conf.d/default.conf
         deploy:
             labels:
                 traefik.docker.network: web
@@ -90,6 +109,7 @@ networks:
         driver: overlay
     web:
         external: true
+        
 volumes:
     elastic-full-text-volume:
         external: true
@@ -97,3 +117,13 @@ volumes:
         external: true
     db-full-text-volume:
         external: true
+    applicationVolume:
+        external: true
+           
+configs:
+  appEnv:
+    external: true
+  appNginxConfig:
+    external: true
+  appPHPIni:
+    external: true

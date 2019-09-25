@@ -1,0 +1,19 @@
+FROM carlosocarvalho/php-api-laravel-es:1.0.0 as builder
+
+WORKDIR /application
+
+COPY . /application
+
+RUN apt update \
+    && apt install -y php7.3-bcmath 
+
+RUN composer install \
+   && php artisan key:generate \
+   && php artisan cache:clear \
+   && chmod -R 777 storage
+
+FROM carlosocarvalho/php-api-laravel-es:1.0.0
+
+WORKDIR /application
+
+COPY --from=builder /application /application
